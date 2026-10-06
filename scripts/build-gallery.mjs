@@ -164,6 +164,20 @@ const page = `<!doctype html>
     dialog.code[open]::backdrop { background: rgba(255, 255, 255, 0); backdrop-filter: blur(0); -webkit-backdrop-filter: blur(0); }
   }
   dialog.code { box-shadow: 0 24px 64px rgba(0, 0, 0, 0.12); }
+  html:has(dialog.code[open]) { overflow: hidden; }
+  .grip { display: none; }
+  @media (max-width: 640px) {
+    dialog.code { width: 100%; height: 88dvh; margin: auto 0 0; border-width: 1px 0 0; border-radius: 16px 16px 0 0; opacity: 1; transform: translateY(100%); transition: transform 420ms cubic-bezier(0.32, 0.72, 0, 1), overlay 420ms allow-discrete, display 420ms allow-discrete; box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.1); }
+    dialog.code[open] { transform: none; }
+    dialog.code.dragging { transition: none; }
+    @starting-style { dialog.code[open] { opacity: 1; transform: translateY(100%); } }
+    .grip { display: block; flex: none; padding: 8px 0 2px; touch-action: none; cursor: grab; }
+    .grip::before { content: ""; display: block; width: 36px; height: 4px; margin: 0 auto; border-radius: 2px; background: var(--track); }
+    .tools { padding: 6px 8px 10px 16px; touch-action: none; }
+    .tools button { padding: 6px 12px; font-size: 12px; }
+    .tools .close { width: 34px; height: 34px; font-size: 20px; }
+    .scroll { padding-bottom: env(safe-area-inset-bottom); }
+  }
   .tools { display: flex; align-items: center; gap: 6px; padding: 10px 10px 10px 16px; border-bottom: 1px solid var(--track); color: var(--dim); font: 12px/1.4 ui-monospace, Menlo, monospace; }
   .tools span { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .tools button { padding: 3px 10px; border: 1px solid var(--track); border-radius: 999px; background: none; color: var(--dim); font: inherit; font-size: 11px; cursor: pointer; }
@@ -210,9 +224,10 @@ ${cards}
 </main>
 <footer>
   <span>Built by <a href="https://marvintunjiola.com" target="_blank" rel="noopener">Marvin Tunjiola</a></span>
-  <span>Inspired by <a href="https://lucasmarkes.com/lab/hairline" target="_blank" rel="noopener">Hairline</a> by Lucas Markes</span>
+  <span>Inspired by <a href="https://lucasmarkes.com/lab/hairline" target="_blank" rel="noopener">Hairline</a></span>
 </footer>
 <dialog class="code" id="code" aria-label="React code">
+  <div class="grip" aria-hidden="true"></div>
   <div class="tools">
     <span id="code-file"></span>
     <button type="button" id="code-copy">Copy</button>
@@ -311,6 +326,36 @@ ${registry.map((e) => `<script>\n${wrap(figures.get(e.figure).src)}\n</script>`)
   });
   document.getElementById("code-close").addEventListener("click", () => modal.close());
   modal.addEventListener("click", (e) => { if (e.target === modal) modal.close(); });
+
+  /* on a phone the modal is a sheet: drag its handle or header down to put it away */
+  const sheet = matchMedia("(max-width: 640px)");
+  let drag = null;
+  for (const el of [modal.querySelector(".grip"), modal.querySelector(".tools")]) {
+    el.addEventListener("pointerdown", (e) => {
+      if (!sheet.matches || e.target.closest("button")) return;
+      drag = { y: e.clientY, t: e.timeStamp, dy: 0, v: 0 };
+      el.setPointerCapture(e.pointerId);
+      modal.classList.add("dragging");
+    });
+    el.addEventListener("pointermove", (e) => {
+      if (!drag) return;
+      const dy = Math.max(0, e.clientY - drag.y), dt = e.timeStamp - drag.t;
+      if (dt > 0) drag.v = (dy - drag.dy) / dt;
+      drag.dy = dy; drag.t = e.timeStamp;
+      modal.style.transform = "translateY(" + dy + "px)";
+    });
+    const end = (e) => {
+      if (!drag) return;
+      const flick = e.timeStamp - drag.t < 100 && drag.v > 0.5;
+      const away = drag.dy > modal.offsetHeight * 0.25 || flick;
+      drag = null;
+      modal.classList.remove("dragging");
+      modal.style.transform = "";
+      if (away) modal.close();
+    };
+    el.addEventListener("pointerup", end);
+    el.addEventListener("pointercancel", end);
+  }
   copy.addEventListener("click", async () => {
     try { await navigator.clipboard.writeText(open.code); } catch {
       const t = document.createElement("textarea");
