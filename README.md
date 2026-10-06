@@ -101,26 +101,26 @@ ancestor, or `color-scheme`), and can be restyled with `--hairline-plate`, `--ha
 
 | No. | Figure | What it is |
 | --- | --- | --- |
-| 1 | coin-stacks | A portfolio of coin stacks that rebalances toward the one you pick |
-| 2 | stepping-stones | Stepping stones across a stream that rise to meet the pointer |
-| 3 | cabinets | Three cabinets out of sync: open a drawer on one and it opens on every machine |
-| 4 | nearest-pegs | Pegs scattered like embeddings, where the k nearest to the pointer rise |
-| 5 | gate | Lanes of work queued behind a single gate, merging in single file |
-| 6 | chat-thread | A phone with a chat thread rising off it, each bubble lifting out when picked |
-| 7 | voice-bars | A voice drawn as a row of bars that swells wherever you listen |
-| 8 | note-grid | Research notes scattered on a desk that fall into a grid near the pointer |
-| 9 | platforms | Three platforms at different heights, tied by planks, that level out to the one you pick |
-| 10 | tape-reels | A tape recorder you scrub, winding the recording from one reel to the other |
-| 11 | switchboard | A switchboard of calls in progress, the picked line's cord pulling up out of the bay |
-| 12 | upload-tray | Files hovering over an upload tray, dropping into the drop zone when picked |
-| 13 | device-frames | Device frames in a stand, the one under the pointer standing up |
-| 14 | widget-board | A dashboard of widget tiles, the one under the pointer lifting out of the board |
-| 15 | toolbox | A cantilever toolbox that opens into a staircase of trays |
-| 16 | dominoes | An arc of dominoes whose fall you run along the row, the fallen ones lying shingled |
-| 17 | piano-keys | A keyboard where the key under the pointer plays its major chord as an arpeggio |
-| 18 | solar-panels | A field of solar panels on posts that all tilt to face the pointer as the sun |
-| 19 | bookshelf | A bookcase of mixed books, the one under the pointer tipping out toward you |
-| 20 | baggage-carousel | Suitcases riding a carousel that slows under the pointer so you can follow one |
-| 21 | rolodex | A rotary card file you flick round, a detent standing the nearest card up |
+| 1 | rolodex | A rotary card file you flick round, a detent standing the nearest card up |
+| 2 | dominoes | An arc of dominoes whose fall you run along the row, the fallen ones lying shingled |
+| 3 | voice-bars | A voice drawn as a row of bars that swells wherever you listen |
+| 4 | note-grid | Research notes scattered on a desk that fall into a grid near the pointer |
+| 5 | device-frames | Device frames in a stand, the one under the pointer standing up |
+| 6 | coin-stacks | A portfolio of coin stacks that rebalances toward the one you pick |
+| 7 | stepping-stones | Stepping stones across a stream that rise to meet the pointer |
+| 8 | cabinets | Three cabinets out of sync: open a drawer on one and it opens on every machine |
+| 9 | nearest-pegs | Pegs scattered like embeddings, where the k nearest to the pointer rise |
+| 10 | gate | Lanes of work queued behind a single gate, merging in single file |
+| 11 | chat-thread | A phone with a chat thread rising off it, each bubble lifting out when picked |
+| 12 | platforms | Three platforms at different heights, tied by planks, that level out to the one you pick |
+| 13 | tape-reels | A tape recorder you scrub, winding the recording from one reel to the other |
+| 14 | switchboard | A switchboard of calls in progress, the picked line's cord pulling up out of the bay |
+| 15 | upload-tray | Files hovering over an upload tray, dropping into the drop zone when picked |
+| 16 | widget-board | A dashboard of widget tiles, the one under the pointer lifting out of the board |
+| 17 | toolbox | A cantilever toolbox that opens into a staircase of trays |
+| 18 | piano-keys | A keyboard where the key under the pointer plays its major chord as an arpeggio |
+| 19 | solar-panels | A field of solar panels on posts that all tilt to face the pointer as the sun |
+| 20 | bookshelf | A bookcase of mixed books, the one under the pointer tipping out toward you |
+| 21 | baggage-carousel | Suitcases riding a carousel that slows under the pointer so you can follow one |
 
 `figures/gallery.json` is the source of truth for this list.
