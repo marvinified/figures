@@ -16,6 +16,7 @@
   body { font: 12px/1.45 ui-sans-serif, system-ui, -apple-system, sans-serif; }
   .switching, .switching *, .switching *::before, .switching *::after { transition: none !important; }
   .bar { position: sticky; top: 0; z-index: 1; display: flex; align-items: center; gap: 18px; max-width: 1200px; margin: 0 auto; padding: 18px 24px; background: var(--bg); }
+  .bar::after { content: ""; position: absolute; left: 0; right: 0; top: 100%; height: 32px; background: linear-gradient(var(--bg), transparent); pointer-events: none; }
   .bar h1 { flex: 1; margin: 0; font-size: 12px; font-weight: 500; }
   .icon { display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 0; border-radius: 50%; background: none; color: var(--ink); cursor: pointer; }
   .icon:hover { background: var(--track); }
