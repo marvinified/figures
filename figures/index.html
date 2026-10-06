@@ -13,7 +13,8 @@
   [data-theme="dark"] { --bg: #0a0a0a; --ink: #ededed; --dim: #6f6f6f; --track: #2a2a2a; --soft: #b4b4b4; --str: #9cc3a3; --num: #d6b77a; color-scheme: dark; }
   * { box-sizing: border-box; }
   html, body { margin: 0; background: var(--bg); color: var(--ink); }
-  body { font: 12px/1.45 ui-sans-serif, system-ui, -apple-system, sans-serif; transition: background 200ms, color 200ms; }
+  body { font: 12px/1.45 ui-sans-serif, system-ui, -apple-system, sans-serif; }
+  .switching, .switching *, .switching *::before, .switching *::after { transition: none !important; }
   .bar { position: sticky; top: 0; z-index: 1; display: flex; align-items: center; gap: 18px; max-width: 1200px; margin: 0 auto; padding: 18px 24px; background: var(--bg); }
   .bar h1 { flex: 1; margin: 0; font-size: 12px; font-weight: 500; }
   .icon { display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 0; border-radius: 50%; background: none; color: var(--ink); cursor: pointer; }
@@ -21,14 +22,6 @@
   .icon:focus-visible { outline: 1.5px solid var(--ink); outline-offset: 2px; }
   .icon svg { width: 18px; height: 18px; fill: currentColor; }
   .icon svg.line { fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
-  input[type="range"] { -webkit-appearance: none; appearance: none; width: 140px; height: 20px; margin: 0; background: none; cursor: pointer; --p: 50%; }
-  input[type="range"]::-webkit-slider-runnable-track { height: 2px; border-radius: 2px; background: linear-gradient(var(--ink), var(--ink)) 0 / var(--p) 100% no-repeat, var(--track); }
-  input[type="range"]::-moz-range-track { height: 2px; border-radius: 2px; background: var(--track); }
-  input[type="range"]::-moz-range-progress { height: 2px; border-radius: 2px; background: var(--ink); }
-  input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 12px; height: 12px; margin-top: -5px; border: 0; border-radius: 50%; background: var(--ink); transition: transform 120ms; }
-  input[type="range"]::-moz-range-thumb { width: 12px; height: 12px; border: 0; border-radius: 50%; background: var(--ink); }
-  input[type="range"]:active::-webkit-slider-thumb { transform: scale(1.25); }
-  input[type="range"]:focus-visible { outline: 1.5px solid var(--ink); outline-offset: 4px; border-radius: 4px; }
   main { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 28px 24px; max-width: 1200px; margin: 0 auto; padding: 8px 24px 64px; }
   figure { margin: 0; }
   .stage { --hairline-plate: var(--bg); }
@@ -74,14 +67,19 @@
   .search::-webkit-search-cancel-button { -webkit-appearance: none; }
   .search:focus-visible { outline: 1.5px solid var(--ink); outline-offset: 2px; }
   .empty { grid-column: 1 / -1; padding: 48px 0; text-align: center; color: var(--dim); }
+  a.icon { text-decoration: none; }
+  footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; max-width: 1200px; margin: 0 auto; padding: 20px 24px 32px; color: var(--dim); font-size: 11.5px; }
+  footer a { color: var(--soft); text-decoration: none; }
+  footer a:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 2px; }
+  footer a:focus-visible { outline: 1.5px solid var(--ink); outline-offset: 2px; border-radius: 2px; }
 </style>
 </head>
 <body>
 <div class="bar">
   <h1>Figures</h1>
   <input id="search" class="search" type="search" placeholder="Search  /" aria-label="Search figures" autocomplete="off" spellcheck="false">
-  <input id="intensity" type="range" min="0" max="1" step="0.01" value="0.5" aria-label="Intensity">
   <button id="theme" class="icon" type="button" aria-label="Switch to dark mode"></button>
+  <a class="icon" href="https://github.com/marvinified/figures" target="_blank" rel="noopener" aria-label="Source on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a>
 </div>
 <main>
     <figure data-search="01 coin-stacks a portfolio of coin stacks that rebalances toward the one you pick">
@@ -338,6 +336,10 @@
     </figure>
   <p class="empty" id="empty" hidden>No figure matches.</p>
 </main>
+<footer>
+  <span>Built by <a href="https://marvintunjiola.com" target="_blank" rel="noopener">Marvin Tunjiola</a></span>
+  <span>Inspired by <a href="https://lucasmarkes.com/lab/hairline" target="_blank" rel="noopener">Hairline</a> by Lucas Markes</span>
+</footer>
 <dialog class="code" id="code" aria-label="React code">
   <div class="tools">
     <span id="code-file"></span>
@@ -3351,8 +3353,6 @@ hairline({
 <script>
 (() => {
   const ICONS = {"play":"<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M8 5.5v13l10.5-6.5z\"/></svg>","pause":"<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M7.5 5.5h3v13h-3zM13.5 5.5h3v13h-3z\"/></svg>","sun":"<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\" class=\"line\"><circle cx=\"12\" cy=\"12\" r=\"4\"/><path d=\"M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8\"/></svg>","moon":"<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\" class=\"line\"><path d=\"M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z\"/></svg>"};
-  /* intensity 0..1 to the figure's own number: two straight lines that meet at 0.5 */
-  const at = ([lo, mid, hi], i) => (i <= 0.5 ? lo + (i / 0.5) * (mid - lo) : mid + ((i - 0.5) / 0.5) * (hi - mid));
   HL.inject(document);
 
   const cards = [...document.querySelectorAll("[data-figure]")].map((stage, k) => {
@@ -3362,16 +3362,10 @@ hairline({
     stage.setAttribute("aria-label", figure.means);
     const svg = HL.mk("svg", { viewBox: "0 0 400 320", "aria-hidden": "true" }, stage);
     const read = { textContent: "" };
-    const card = { figure, stage, phase: k * 0.37, hovered: false, handle: figure.mount({ stage, svg, read }, at(figure.range, 0.5)) };
+    const card = { figure, stage, phase: k * 0.37, hovered: false, handle: figure.mount({ stage, svg, read }, figure.range[1]) };
     stage.addEventListener("pointerenter", (e) => { if (e.isTrusted) card.hovered = true; });
     stage.addEventListener("pointerleave", (e) => { if (e.isTrusted) card.hovered = false; });
     return card;
-  });
-
-  const range = document.getElementById("intensity");
-  range.addEventListener("input", () => {
-    range.style.setProperty("--p", range.value * 100 + "%");
-    for (const c of cards) c.handle.set(at(c.figure.range, Number(range.value)));
   });
 
   /* play: a pointer of our own traces a figure-eight over each drawing, each a little out of step */
@@ -3505,9 +3499,12 @@ hairline({
     theme.setAttribute("aria-label", dark ? "Switch to light mode" : "Switch to dark mode");
   };
   theme.addEventListener("click", () => {
+    root.classList.add("switching");
     root.dataset.theme = root.dataset.theme === "dark" ? "light" : "dark";
     localStorage.setItem("hl-theme", root.dataset.theme);
     paint();
+    getComputedStyle(root).color;
+    requestAnimationFrame(() => requestAnimationFrame(() => root.classList.remove("switching")));
   });
   paint();
 })();
