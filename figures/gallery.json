@@ -1,0 +1,23 @@
+[
+  {"no": 1, "figure": "coin-stacks", "prompt": "A portfolio of coin stacks that rebalances toward the one you pick"},
+  {"no": 2, "figure": "stepping-stones", "prompt": "Stepping stones across a stream that rise to meet the pointer"},
+  {"no": 3, "figure": "cabinets", "prompt": "Three cabinets out of sync: open a drawer on one and it opens on every machine"},
+  {"no": 4, "figure": "nearest-pegs", "prompt": "Pegs scattered like embeddings, where the k nearest to the pointer rise"},
+  {"no": 5, "figure": "gate", "prompt": "Lanes of work queued behind a single gate, merging in single file"},
+  {"no": 6, "figure": "chat-thread", "prompt": "A phone with a chat thread rising off it, each bubble lifting out when picked"},
+  {"no": 7, "figure": "voice-bars", "prompt": "A voice drawn as a row of bars that swells wherever you listen"},
+  {"no": 8, "figure": "note-grid", "prompt": "Research notes scattered on a desk that fall into a grid near the pointer"},
+  {"no": 9, "figure": "platforms", "prompt": "Three platforms at different heights, tied by planks, that level out to the one you pick"},
+  {"no": 10, "figure": "tape-reels", "prompt": "A tape recorder you scrub, winding the recording from one reel to the other"},
+  {"no": 11, "figure": "switchboard", "prompt": "A switchboard of calls in progress, the picked line's cord pulling up out of the bay"},
+  {"no": 12, "figure": "upload-tray", "prompt": "Files hovering over an upload tray, dropping into the drop zone when picked"},
+  {"no": 13, "figure": "device-frames", "prompt": "Device frames in a stand, the one under the pointer standing up"},
+  {"no": 14, "figure": "widget-board", "prompt": "A dashboard of widget tiles, the one under the pointer lifting out of the board"},
+  {"no": 15, "figure": "toolbox", "prompt": "A cantilever toolbox that opens into a staircase of trays"},
+  {"no": 16, "figure": "dominoes", "prompt": "An arc of dominoes whose fall you run along the row, the fallen ones lying shingled"},
+  {"no": 17, "figure": "piano-keys", "prompt": "A keyboard where the key under the pointer plays its major chord as an arpeggio"},
+  {"no": 18, "figure": "solar-panels", "prompt": "A field of solar panels on posts that all tilt to face the pointer as the sun"},
+  {"no": 19, "figure": "bookshelf", "prompt": "A bookcase of mixed books, the one under the pointer tipping out toward you"},
+  {"no": 20, "figure": "baggage-carousel", "prompt": "Suitcases riding a carousel that slows under the pointer so you can follow one"},
+  {"no": 21, "figure": "rolodex", "prompt": "A rotary card file you flick round, a detent standing the nearest card up"}
+]

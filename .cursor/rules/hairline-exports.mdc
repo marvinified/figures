@@ -1,0 +1,63 @@
+---
+description: How to export Hairline figures (React file, script embed, iframe, GIF) and how to use each export. Use when asked to export, embed, ship or share a Hairline figure.
+alwaysApply: false
+---
+
+# Exporting Hairline figures
+
+A figure is a `<name>.js` file ending in `hairline({ name, means, rules, range, mount })`.
+Every script lives in `scripts/`, takes figure files as arguments (or finds every
+figure in the current folder), and writes to `export/` under the current folder.
+Run them from the folder that holds the figures. For `figures/`, the React copies
+are kept in `figures/react/` (`--out react`), as the hairline-figures rule says. The engine is read from
+`~/.agents/skills/hairline-create/kernel.js`; never copy or edit it by hand.
+
+## Choosing an export
+
+| Target | Command | Output |
+|---|---|---|
+| React app (default) | `node scripts/export-react.mjs enclave.js` | `export/react/Enclave.tsx` |
+| Plain website, CMS | `node scripts/export-embed.mjs enclave.js` | `export/embed/hairline.js`, `export/embed/enclave.js`, `export/embed/index.html` (demo) |
+| Sandboxed, Notion, MDX without JS | same as above | `export/iframe/enclave.html` |
+| Static image (README, Slack, email) | `node scripts/export-gif.mjs enclave.js [--theme dark] [--path "x,y x,y"] [--dwell 1300]` | `export/enclave[-dark].gif` |
+
+Prefer the React file for React projects. It is one self-contained file that imports only
+`react`, shadcn style: copy it in and the project owns it. Do not build an npm
+package or a shadcn registry for it.
+
+## Using each export
+
+React: copy the file to e.g. `components/hairline/Enclave.tsx`. It carries
+`"use client"` and `// @ts-nocheck` (the engine is untyped JS); the props are typed.
+```tsx
+import { Enclave } from "@/components/hairline/Enclave";
+<Enclave intensity={0.5} theme="dark" onRead={(r) => setRead(r)} className="max-w-md" />
+```
+Use functional components only, and use yarn for any dependency (`yarn add react`).
+
+Script embed: serve `export/embed/`. Load `hairline.js` once, then each figure.
+```html
+<script src="/hairline/hairline.js"></script>
+<script src="/hairline/enclave.js"></script>
+<div data-hairline-figure="enclave" data-hairline-intensity="0.5"></div>
+```
+The read-out comes as a bubbling `hairline:read` event (`e.detail`). Use `hairline.mount(el, name, { intensity, onRead })` for elements added later.
+
+Iframe: `<iframe src="/hairline/enclave.html?theme=dark&intensity=0.5" style="width:100%;aspect-ratio:5/4;border:0"></iframe>`. It also takes `?plate=<colour>`.
+
+## Shared behaviour
+
+- A figure fills its width at a 5:4 ratio. Size it with the width only.
+- Theme: it follows a `.dark` or `[data-theme="dark"]` ancestor, or the page's `color-scheme`. Use `theme` or `data-hairline-theme` to force one.
+- Restyle with CSS variables on the element or any ancestor: `--hairline-plate`, `--hairline-hi`, `--hairline-edge`, `--hairline-mid`, `--hairline-lo`, `--hairline-stroke`.
+
+## Verifying
+
+Chrome and the scripts need the sandbox lifted (`required_permissions: ["all"]`).
+After an export, check it in a real browser with playwright-core from `~/Library/Caches/hairline-look`:
+- the figure renders,
+- hovering changes `data-hairline-read`,
+- the console has no errors.
+
+For React exports, also run `tsc --strict` on a page that mounts two figures under `StrictMode`. Each should mount exactly one `<svg>`.
+Keep test projects in a throwaway folder and delete them afterwards.

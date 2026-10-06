@@ -1,0 +1,60 @@
+---
+description: Where Hairline figures and their generated files go in figures/, and how every figure is registered on the gallery page with a React copy. Applies when creating, changing, renaming or removing a figure.
+alwaysApply: true
+---
+
+# Hairline figures: placement and registry
+
+Every Hairline figure of this workspace lives in `figures/`, whatever it was made for.
+The folder is for figures only: no site copy, dates, tags or project context.
+
+## Layout
+
+```
+figures/
+  <name>.js          the figure source, the only .js files at this level
+  gallery.json       the registry: { "no": 16, "figure": "<name>", "prompt": "…" }, in number order
+  index.html         the gallery page, generated, never edited by hand
+  react/<Name>.tsx   the React copy of each figure, generated
+  gif/<name>.gif     the light and dark GIFs (<name>-dark.gif), generated
+  build/             look.mjs output: hairline-<name>.html and its PNG sheets
+  archive/           retired figures, read by nothing
+```
+
+- A new figure is written straight to `figures/<name>.js`. Nothing else goes at the top level.
+- `name` says what the object is, lowercase and hyphenated (`tape-reels`, `coin-stacks`), never
+  the product or project it was drawn for. The file, the `name`, the first word of the header
+  comment and the registry entry all use it; the React copy is its PascalCase (`TapeReels.tsx`).
+  The page shows the name above the prompt.
+- Run the skill's checks from `figures/build/`, so their pages and sheets land there:
+  `cd figures/build && node ~/.agents/skills/hairline-create/look.mjs ../<name>.js --answer … --edge …`
+- Other exports (embed, iframe, GIF) are written on request to `figures/export/`, never committed as part of the gallery.
+
+## When you create, change, rename or remove a figure, in the same change
+
+1. Update `figures/gallery.json`: one entry per figure, `figure` equal to the figure's `name`,
+   `prompt` one short line saying what the figure is, the way you would ask for it
+   (no product names, dates or site context). `no` is the figure's number: a new figure goes
+   at the end with the highest number plus one. A number stays with its figure through
+   renames and edits, and a retired figure's number is never given again.
+   ```json
+   { "no": 1, "figure": "coin-stacks", "prompt": "A portfolio of coin stacks that rebalances toward the one you pick" }
+   ```
+2. Regenerate the React copies: `cd figures && node ../scripts/export-react.mjs --out react`.
+   A removed or renamed figure's old `react/<Name>.tsx` is deleted.
+3. Regenerate the GIFs from the workspace root: `node scripts/export-gifs.mjs` (needs ffmpeg;
+   only stale ones are remade). A removed or renamed figure's old GIFs are deleted.
+4. Rebuild the page from the workspace root: `node scripts/build-gallery.mjs`.
+   It exits 1 and writes nothing if a figure is unregistered, an entry names no figure,
+   a figure is listed twice, or a React copy or GIF is missing or older than its source.
+   Fix the files; do not bypass the check.
+
+Each figure on the page has its own play button (bottom right of the drawing), shows its number,
+name and prompt, and three pills: PNG (drawn in the
+browser from the figure as it stands), GIF (linked from `gif/`, in the page's theme) and React
+(the figure's `react/<Name>.tsx` in a modal, with Copy and Download).
+
+A figure you retire moves to `figures/archive/`, and its entry, React copy and GIFs go.
+
+Node and Chrome need the sandbox lifted. Before handing over, run
+`node scripts/build-gallery.mjs --check` and say it passed.
