@@ -122,5 +122,25 @@ ancestor, or `color-scheme`), and can be restyled with `--hairline-plate`, `--ha
 | 19 | solar-panels | A field of solar panels on posts that all tilt to face the pointer as the sun |
 | 20 | bookshelf | A bookcase of mixed books, the one under the pointer tipping out toward you |
 | 21 | baggage-carousel | Suitcases riding a carousel that slows under the pointer so you can follow one |
+| 22 | block-tower | A stacking-block tower where the layer under the pointer pushes its blocks out |
+| 23 | mailboxes | A bank of mailboxes whose door under the pointer swings open on the post inside |
+| 24 | blinds | A venetian blind whose slats open where the pointer is and stay shut further away |
+| 25 | swatch-fan | A fan deck of colour strips, the one under the pointer sliding out as the rest part |
+| 26 | bowling-pins | Ten pins and a ball that follows the pointer, the pins nearest it leaning away |
+| 27 | radio-dial | A portable radio tuned by the pointer, settling on stations as its antenna draws out |
+| 28 | balance-scale | A beam balance whose rider follows the pointer, the beam tipping toward the heavier side |
+| 29 | pendant-lamps | Pendant lamps over a table that swing away from the pointer, the nearest one lit |
+| 30 | canal-locks | A flight of canal locks where the chamber under the pointer opens its gate and drains |
+| 31 | abacus | An abacus where the pointer picks a rod and a count and the beads slide over in turn |
+| 32 | token-bars | A model's next-token probabilities that sharpen or level out as the pointer sets the temperature |
+| 33 | neural-net | A small neural network where the input under the pointer fires and its signal runs forward |
+| 34 | agent-tools | An agent wired to six tools, the one under the pointer lifting as a call runs out to it |
+| 35 | context-window | A context window over a conversation whose messages rise into it, the system prompt always in |
+| 36 | layer-stack | A screen design exploded into layers, the one under the pointer sliding out of the stack |
+| 37 | responsive-grid | A responsive grid of cards that stretches and reflows as the pointer drags the page edge |
+| 38 | window-stack | A cascade of app windows where the one under the pointer comes to the front |
+| 39 | keycaps | The letter keys of a keyboard, the key under the pointer pressing down |
+| 40 | server-rack | A rack of servers, the one under the pointer sliding out with its lights on |
+| 41 | marquee-select | Marquee selection on a design canvas, the shapes inside lifting into a box with handles |
 
 `figures/gallery.json` is the source of truth for this list.
