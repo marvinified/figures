@@ -632,7 +632,7 @@ function mount({ stage, svg, read }, value) {
   // under-damped on purpose: a hung shade swings past its rest and settles
   const lamps = LAMPS.map((l) => {
     const lg = mk("g", {}, g);
-    return { ...l, cord: mk("path", { class: "nf" }, lg), el: solid(lg), ox: spring(0, { k: 60, c: 7, eps: 0.02 }), oy: spring(0, { k: 60, c: 7, eps: 0.02 }), drawn: "" };
+    return { ...l, lg, cord: mk("path", { class: "nf" }, lg), el: solid(lg), ox: spring(0, { k: 60, c: 7, eps: 0.02 }), oy: spring(0, { k: 60, c: 7, eps: 0.02 }), drawn: "" };
   });
 
   /** A shade hung from its rail point down its cord: rings across the cord's line, their hull for the outline, a band's front half for the crease. */
@@ -657,6 +657,7 @@ function mount({ stage, svg, read }, value) {
   const B = register(stage, (dt) => {
     let m = false;
     for (const l of lamps) { if (stepS(l.ox, dt) | stepS(l.oy, dt)) m = true; drawLamp(l); }
+    lamps.slice().sort((a, b) => a.x + a.ox.x + a.oy.x - (b.x + b.ox.x + b.oy.x)).forEach((l) => g.appendChild(l.lg));
     const l = lamps[lit < 0 ? REST : lit];
     place(pool, P(clamp(l.foot[0], TABLE[0] + 14, TABLE[2] - 14), clamp(l.foot[1], TABLE[1] + 8, TABLE[3] - 8), ZT));
     return m;
@@ -670,13 +671,13 @@ function mount({ stage, svg, read }, value) {
     return bd < 60 ? best : -1;
   }
 
-  /** Each shade pushed away from the pointer, read on the level of that shade, harder the closer the pointer. */
+  /** Each shade pushed away from the pointer, read on the level of that shade: none under it or past the reach, most a third of the way out. */
   function retarget() {
     for (const l of lamps) {
       let tx = 0, ty = 0;
       if (over) {
         const [x, y] = unproj(C, over[0], over[1], l.top - l.s.H / 2), dx = l.x - x, dy = -y, d = Math.hypot(dx, dy);
-        if (d < REACH && d > 1e-3) { const f = PUSH * (1 - d / REACH); tx = (dx / d) * f; ty = (dy / d) * f; }
+        if (d < REACH && d > 1e-3) { const u = d / REACH, f = PUSH * 6.75 * u * (1 - u) ** 2; tx = (dx / d) * f; ty = (dy / d) * f; }
       }
       l.ox.t = tx; l.oy.t = ty;
     }

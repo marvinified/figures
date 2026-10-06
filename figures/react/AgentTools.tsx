@@ -666,7 +666,12 @@ function mount({ stage, svg, read }, value) {
     for (const t of tools) { draw(t, now); if (!tdone(t.lift, now)) moving = true; }
     const s = Math.min(1, (now - sent) / 650), k = act < 0 ? REST : act;
     let d = "";
-    if (act >= 0 && s < 1) { const [x, y] = P(...tools[k].path[Math.round(s * 24)]); d = `M${x - pr} ${y}a${pr} ${pr} 0 1 0 ${2 * pr} 0a${pr} ${pr} 0 1 0 ${-2 * pr} 0Z`; moving = true; }
+    if (act >= 0 && s < 1) {
+      const e = (s * s * (3 - 2 * s)) * 24, j = Math.min(23, Math.floor(e)), f = e - j, a = tools[k].path[j], b = tools[k].path[j + 1];
+      const [x, y] = P(a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f, a[2] + (b[2] - a[2]) * f);
+      d = `M${x - pr} ${y}a${pr} ${pr} 0 1 0 ${2 * pr} 0a${pr} ${pr} 0 1 0 ${-2 * pr} 0Z`;
+      moving = true;
+    }
     packet.setAttribute("d", d);
     return moving;
   });

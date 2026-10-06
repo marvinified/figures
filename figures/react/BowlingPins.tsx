@@ -602,7 +602,7 @@ const {
   spring, stepS, mk, pointer, put, register, disposer, solid,
 } = HL;
 
-const D = 12, R = 8.6, MAX = rad(40), XB = -44 + R + 2, XL = [-44, 74], YL = 24, BREST = [56, 5];
+const D = 12, R = 8.6, CLEAR = R + 4.5, GAP = 10, MAX = rad(28), XB = -44 + R + 2, XL = [-44, 74], YL = 24, BREST = [56, 5];
 const PROF = [[0, 2.3], [2.5, 3.5], [8.5, 4.7], [14, 3.9], [19, 2], [21, 1.9], [24.5, 2.6], [27.5, 2.3], [29.4, 1.1], [30, 0]];
 const STRIPES = [19.6, 21.2];
 
@@ -636,7 +636,7 @@ function mount({ stage, svg, read }, value) {
 
   const pins = PINS.map((p) => {
     const el = solid(g);
-    return { ...p, el, marks: mk("path", { class: "nf lo" }, el.g), tx: spring(0, { eps: 0.002 }), ty: spring(0, { eps: 0.002 }), ox: spring(0, { eps: 0.05 }), oy: spring(0, { eps: 0.05 }), drawn: "" };
+    return { ...p, el, marks: mk("path", { class: "nf lo" }, el.g), tx: spring(0, { eps: 0.002 }), ty: spring(0, { eps: 0.002 }), ox: spring(0, { eps: 0.05 }), oy: spring(0, { eps: 0.05 }), side: [1, 0], drawn: "" };
   });
   const ball = { el: solid(g), x: spring(BREST[0], { eps: 0.05 }), y: spring(BREST[1], { eps: 0.05 }), drawn: "" };
   ball.holes = mk("path", { class: "nf lo" }, ball.el.g);
@@ -679,19 +679,29 @@ function mount({ stage, svg, read }, value) {
     }).join(""));
   }
 
-  /** Each pin's lean away from the ball, full within a pin's width of it and none past the reach, and its foot shoved clear of the ball. A lean toward the camera is mostly turned sideways: end on, a turned outline folds over itself. */
+  /** Each pin's lean away from the ball, full within a pin's width of it and none past the reach, and its foot shoved clear of the ball and of the others. A shoved pin keeps the side of the ball it was met on and slides round it. A lean toward the camera is mostly turned sideways: end on, a turned outline folds over itself. */
   function retarget() {
     const bx = ball.x.x, by = ball.y.x;
     let near = 0, best = 1e9;
-    for (const p of pins) {
-      const dx = p.x - bx, dy = p.y - by, d = Math.hypot(dx, dy), u = clamp((d - R - 5) / REACH, 0, 1), f = (1 - u) ** 2 * MAX;
-      const push = Math.max(0, R + 5 - d);
+    const at = pins.map((p) => {
+      const vx = p.x - bx, vy = p.y - by, d = Math.hypot(vx, vy);
+      if (d >= CLEAR) { p.side = [vx / d, vy / d]; return [p.x, p.y]; }
+      const sx = vx + 0.6 * CLEAR * p.side[0], sy = vy + 0.6 * CLEAR * p.side[1], m = Math.hypot(sx, sy) || 1;
+      p.side = [sx / m, sy / m];
+      return [bx + p.side[0] * CLEAR, by + p.side[1] * CLEAR];
+    });
+    for (let it = 0; it < 4; it++) for (let i = 0; i < at.length; i++) for (let j = i + 1; j < at.length; j++) {
+      const dx = at[j][0] - at[i][0], dy = at[j][1] - at[i][1], d = Math.hypot(dx, dy) || 1, o = (GAP - d) / 2;
+      if (o > 0) { at[i] = [at[i][0] - (dx / d) * o, at[i][1] - (dy / d) * o]; at[j] = [at[j][0] + (dx / d) * o, at[j][1] + (dy / d) * o]; }
+    }
+    pins.forEach((p, i) => {
+      const dx = at[i][0] - bx, dy = at[i][1] - by, d = Math.hypot(dx, dy) || 1, u = clamp((d - CLEAR) / REACH, 0, 1), f = (1 - u) ** 2 * MAX;
       let lx = (dx / d) * f, ly = (dy / d) * f;
       const tw = (lx + ly) / 2;
       if (tw > 0) { lx -= 0.75 * tw; ly -= 0.75 * tw; }
-      p.tx.t = lx; p.ty.t = ly; p.ox.t = (dx / d) * push; p.oy.t = (dy / d) * push;
+      p.tx.t = lx; p.ty.t = ly; p.ox.t = at[i][0] - p.x; p.oy.t = at[i][1] - p.y;
       if (d < best) { best = d; near = p.no; }
-    }
+    });
     if (near !== lit) { lit = near; pins.forEach((p) => p.el.sil.classList.toggle("hi", p.no === near)); }
     const txt = over ? `pin ${near}` : "rest";
     if (read.textContent !== txt) read.textContent = txt;

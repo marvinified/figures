@@ -1,9 +1,9 @@
 /**
  * mailboxes: a bank of twelve mailboxes on a plinth, four across and three
- * high, each door with its name slot and keyhole, hinged on the left. The
- * pointer picks the door under it, tested on the closed doors' plane; it swings
- * open on what was delivered, and the doors beside it rattle ajar, staggered
- * outwards. At rest one door stands ajar on a letter, bright. The slider is
+ * high, each door with its name slot and keyhole, hinged along its foot. The
+ * pointer picks the door under it, tested on the closed doors' plane; it drops
+ * open like a flap on what was delivered, and the doors beside it rattle ajar,
+ * staggered outwards. At rest one door stands ajar on a letter, bright. The slider is
  * how far the picked door opens, in degrees.
  */
 const {
@@ -11,7 +11,7 @@ const {
   tween, tset, tval, tdone, mk, pointer, put, register, disposer, solid,
 } = HL;
 
-const NC = 4, NR = 3, CWD = 24, RHT = 25, M = 4, FOOT = 8, T = 1.4, STEP = 50, REST = 5, AJAR = [1, 0.1];
+const NC = 4, NR = 3, CWD = 24, RHT = 25, M = 4, FOOT = 8, T = 1.4, STEP = 50, REST = 5, AJAR = [1, 0.05];
 const W = M * 2 + NC * CWD - 3, H = FOOT + NR * RHT + M, DEP = 26;
 const MAIL = new Set([1, 5, 6, 7, 10]);
 
@@ -58,7 +58,7 @@ function mount({ stage, svg, read }, value) {
 
   // each opening, and what was delivered behind it, drawn before any door
   const doors = [];
-  for (let c = 0; c < NC; c++) for (let r = NR - 1; r >= 0; r--) {
+  for (let c = 0; c < NC; c++) for (let r = 0; r < NR; r++) {
     const x0 = M + c * CWD, z0 = FOOT + r * RHT, w = CWD - 3, h = RHT - 3, n = c * NR + (NR - 1 - r);
     mk("path", { d: wall(rrect(x0 + 1, z0 + 1, x0 + w - 1, z0 + h - 1, 1.5, 3).map((q) => [q.u, q.v])), class: "nf lo" }, g);
     if (MAIL.has(n)) {
@@ -76,7 +76,7 @@ function mount({ stage, svg, read }, value) {
     if (deg === d.drawn) return;
     d.drawn = deg;
     const s = Math.sin(rad(deg)), c = Math.cos(rad(deg));
-    const at = (u, v, t) => [d.x0 + u * c - t * s, u * s + t * c, v];
+    const at = (u, v, t) => [d.x0 + u, (v - d.z0) * s + t * c, d.z0 + (v - d.z0) * c - t * s];
     const q = slab(P, V, at, d.ring, d.inner, T);
     d.el.sil.setAttribute("d", q.sil);
     d.el.cr.setAttribute("d", q.crease);
@@ -104,7 +104,7 @@ function mount({ stage, svg, read }, value) {
     const now = performance.now(), a = doors.find((d) => d.n === (act < 0 ? REST : act)), f = doors.find((d) => d.n === from) || a;
     for (const d of doors) {
       const k = Math.abs(d.c - a.c) + Math.abs(d.r - a.r);
-      const to = act < 0 ? (d === a ? 34 : 0) : OPEN * (AJAR[k] || 0);
+      const to = act < 0 ? (d === a ? 30 : 0) : OPEN * (AJAR[k] || 0);
       tset(d.a, to, now, Math.hypot(d.c - f.c, d.r - f.r) * STEP);
       d.el.sil.classList.toggle("hi", d === a);
     }
@@ -118,15 +118,15 @@ function mount({ stage, svg, read }, value) {
   bag.add(() => svg.replaceChildren());
 
   return {
-    set: (v) => { OPEN = clamp(v, 0, 130); apply(act < 0 ? REST : act); },
+    set: (v) => { OPEN = clamp(v, 0, 92); apply(act < 0 ? REST : act); },
     destroy: bag.dispose,
   };
 }
 
 hairline({
   name: "mailboxes",
-  means: "A bank of mailboxes: the door under the pointer swings open on what was delivered, and its neighbours rattle ajar.",
+  means: "A bank of mailboxes: the door under the pointer drops open on what was delivered, and its neighbours rattle ajar.",
   rules: [1, 2, 5, 6],
-  range: [70, 100, 125],
+  range: [55, 75, 92],
   mount,
 });

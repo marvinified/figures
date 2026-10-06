@@ -621,7 +621,7 @@ function mount({ stage, svg, read }, value) {
   const keys = KEYS.map((k, i) => {
     const [ring, inner] = rings(k.x0, k.y0, k.x0 + k.w, k.y0 + K, 2, 1.6);
     return { ...k, i, ring, inner, cx: k.x0 + k.w / 2, cy: k.y0 + K / 2, sp: spring(0, { k: 260, c: 30, eps: 0.01 }), drawn: NaN };
-  }).sort((a, b) => a.cx + a.cy - (b.cx + b.cy));
+  }).sort((a, b) => a.y0 - b.y0 || a.x0 - b.x0);
   for (const k of keys) { k.el = solid(g); if (k.ch === "F" || k.ch === "J") k.bump = mk("path", { class: "nf" }, k.el.g); }
 
   function draw(k) {

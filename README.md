@@ -38,7 +38,7 @@ at `~/.agents/skills/hairline-create/`, and every script reads it from there.
 
 ## Adding or changing a figure
 
-1. Write `figures/<name>.js`. The name says what the object is (`tape-reels`, `coin-stacks`),
+1. Write `figures/<name>.js`. The name says what the object is (`bowling-pins`, `coin-stacks`),
    lowercase and hyphenated.
 2. Check it from `figures/build/`:
    ```sh
@@ -106,41 +106,44 @@ ancestor, or `color-scheme`), and can be restyled with `--hairline-plate`, `--ha
 | 3 | voice-bars | A voice drawn as a row of bars that swells wherever you listen |
 | 4 | note-grid | Research notes scattered on a desk that fall into a grid near the pointer |
 | 5 | device-frames | Device frames in a stand, the one under the pointer standing up |
-| 6 | coin-stacks | A portfolio of coin stacks that rebalances toward the one you pick |
-| 7 | stepping-stones | Stepping stones across a stream that rise to meet the pointer |
-| 8 | cabinets | Three cabinets out of sync: open a drawer on one and it opens on every machine |
-| 9 | nearest-pegs | Pegs scattered like embeddings, where the k nearest to the pointer rise |
-| 10 | gate | Lanes of work queued behind a single gate, merging in single file |
-| 11 | chat-thread | A phone with a chat thread rising off it, each bubble lifting out when picked |
-| 12 | platforms | Three platforms at different heights, tied by planks, that level out to the one you pick |
-| 13 | tape-reels | A tape recorder you scrub, winding the recording from one reel to the other |
-| 14 | switchboard | A switchboard of calls in progress, the picked line's cord pulling up out of the bay |
-| 15 | upload-tray | Files hovering over an upload tray, dropping into the drop zone when picked |
-| 16 | widget-board | A dashboard of widget tiles, the one under the pointer lifting out of the board |
-| 17 | toolbox | A cantilever toolbox that opens into a staircase of trays |
-| 18 | piano-keys | A keyboard where the key under the pointer plays its major chord as an arpeggio |
-| 19 | solar-panels | A field of solar panels on posts that all tilt to face the pointer as the sun |
-| 20 | bookshelf | A bookcase of mixed books, the one under the pointer tipping out toward you |
-| 21 | baggage-carousel | Suitcases riding a carousel that slows under the pointer so you can follow one |
-| 22 | block-tower | A stacking-block tower where the layer under the pointer pushes its blocks out |
-| 23 | mailboxes | A bank of mailboxes whose door under the pointer swings open on the post inside |
-| 24 | blinds | A venetian blind whose slats open where the pointer is and stay shut further away |
-| 25 | swatch-fan | A fan deck of colour strips, the one under the pointer sliding out as the rest part |
-| 26 | bowling-pins | Ten pins and a ball that follows the pointer, the pins nearest it leaning away |
-| 27 | radio-dial | A portable radio tuned by the pointer, settling on stations as its antenna draws out |
-| 28 | balance-scale | A beam balance whose rider follows the pointer, the beam tipping toward the heavier side |
-| 29 | pendant-lamps | Pendant lamps over a table that swing away from the pointer, the nearest one lit |
-| 30 | canal-locks | A flight of canal locks where the chamber under the pointer opens its gate and drains |
-| 31 | abacus | An abacus where the pointer picks a rod and a count and the beads slide over in turn |
-| 32 | token-bars | A model's next-token probabilities that sharpen or level out as the pointer sets the temperature |
-| 33 | neural-net | A small neural network where the input under the pointer fires and its signal runs forward |
-| 34 | agent-tools | An agent wired to six tools, the one under the pointer lifting as a call runs out to it |
-| 35 | context-window | A context window over a conversation whose messages rise into it, the system prompt always in |
+| 6 | neural-net | A small neural network where the node under the pointer comes out and its signal runs forward |
+| 7 | context-window | A context window over a conversation whose messages rise into it, the system prompt always in |
+| 8 | block-tower | A stacking-block tower where the layer under the pointer pushes its blocks out |
+| 9 | bowling-pins | Ten pins and a ball that follows the pointer, the pins nearest it leaning away |
+| 10 | pendant-lamps | Pendant lamps over a table that swing away from the pointer, the nearest one lit |
+| 11 | coin-stacks | A portfolio of coin stacks that rebalances toward the one you pick |
+| 12 | stepping-stones | Stepping stones across a stream that rise to meet the pointer |
+| 14 | cabinets | Three cabinets out of sync: open a drawer on one and it opens on every machine |
+| 15 | nearest-pegs | Pegs scattered like embeddings, where the k nearest to the pointer rise |
+| 16 | gate | Lanes of work queued behind a single gate, merging in single file |
+| 17 | chat-thread | A phone with a chat thread rising off it, each bubble lifting out when picked |
+| 18 | platforms | Three platforms at different heights, tied by planks, that level out to the one you pick |
+| 19 | switchboard | A switchboard of calls in progress, the picked line's cord pulling up out of the bay |
+| 20 | upload-tray | Files hovering over an upload tray, dropping into the drop zone when picked |
+| 21 | widget-board | A dashboard of widget tiles, the one under the pointer lifting out of the board |
+| 22 | toolbox | A cantilever toolbox that opens into a staircase of trays |
+| 23 | piano-keys | A keyboard where the key under the pointer plays its major chord as an arpeggio |
+| 24 | solar-panels | A field of solar panels on posts that all tilt to face the pointer as the sun |
+| 25 | bookshelf | A bookcase of mixed books, the one under the pointer tipping out toward you |
+| 26 | baggage-carousel | Suitcases riding a carousel that slows under the pointer so you can follow one |
+| 27 | mailboxes | A bank of mailboxes whose door under the pointer swings open on the post inside |
+| 28 | blinds | A venetian blind whose slats open where the pointer is and stay shut further away |
+| 29 | swatch-fan | A fan deck of colour strips, the one under the pointer sliding out as the rest part |
+| 31 | radio-dial | A portable radio tuned by the pointer, settling on stations as its antenna draws out |
+| 32 | balance-scale | A beam balance whose rider follows the pointer along the beam, the beam swinging toward the heavier side |
+| 33 | abacus | An abacus where the pointer picks a rod and a count and the beads slide over in turn |
+| 34 | token-bars | A model's next-token probabilities that sharpen or level out as the pointer sets the temperature |
+| 35 | agent-tools | An agent wired to six tools, the one under the pointer lifting as a call runs out to it |
 | 36 | layer-stack | A screen design exploded into layers, the one under the pointer sliding out of the stack |
 | 37 | responsive-grid | A responsive grid of cards that stretches and reflows as the pointer drags the page edge |
-| 38 | window-stack | A cascade of app windows where the one under the pointer comes to the front |
+| 38 | window-stack | A cascade of app windows where the one under the pointer pulls up out of the stack like a file |
 | 39 | keycaps | The letter keys of a keyboard, the key under the pointer pressing down |
 | 40 | server-rack | A rack of servers, the one under the pointer sliding out with its lights on |
 | 41 | marquee-select | Marquee selection on a design canvas, the shapes inside lifting into a box with handles |
+| 42 | newtons-cradle | A Newton's cradle where the balls you lift out are matched by as many leaving the far end |
+| 43 | metronomes | Metronomes on a rolling board that fall into step when the board is let move |
+| 44 | pulley-weights | Two weights on one cord over a pulley, raising one lowers the other by as much |
+| 45 | compass-field | A field of compasses whose needles within reach turn to point at the pointer |
+| 46 | ripple-pond | Floats on a pond, each lifted in turn by the ripple of a drop at the pointer |
 
 `figures/gallery.json` is the source of truth for this list.

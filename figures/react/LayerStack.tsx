@@ -593,7 +593,7 @@ var HL = (() => {
  * layer-stack: a screen design exploded into its layers, floating one over the
  * next: the background on its dot grid, the card, the image with its hills and sun, the text lines and the
  * button. The pointer picks the layer under it, the top one first; it slides
- * up and back out of the stack and takes the bright edge, the last one sliding
+ * back out of the stack on its own level and takes the bright edge, the last one sliding
  * back. The slider is the gap between layers. At rest the image is half out.
  */
 const {
@@ -632,7 +632,7 @@ function mount({ stage, svg, read }, value) {
     const o = tval(l.out, now), z = zOf(l.i), key = o.toFixed(3) + "," + z;
     if (key === l.drawn) return;
     l.drawn = key;
-    const sh = (r) => r.map((q) => ({ ...q, v: q.v - o })), zz = z + o * 0.6;
+    const sh = (r) => r.map((q) => ({ ...q, v: q.v - o })), zz = z;
     put(l.el, prism(P, front, sh(l.ring), sh(l.inner), zz, zz + T));
     l.marks.setAttribute("d", l.L.marks().map((m) => open(m.map(([u, v]) => { const [x, y] = at(u, v); return P(x, y - o, zz + T); }))).join(""));
   }

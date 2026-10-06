@@ -593,15 +593,16 @@ var HL = (() => {
  * swatch-fan: a fan deck of twelve colour strips standing on one rivet, spread
  * over a half turn and stacked, each strip ruled into five chips. The pointer
  * picks the strip whose resting angle is nearest its own about the rivet; it
- * lifts to the top and slides out along itself, and the strips either side
+ * keeps its place in the stack, slides a little out along itself and takes the
+ * bright edge, and the strips either side
  * part from it by the slider's angle, staggered outwards on the 700ms curve.
- * At rest one strip stands out of the deck, bright.
+ * At rest one strip stands a little out of the deck, bright.
  */
 const {
   Cam, fit, proj, rad, rrect, seg, hull, poly, open, run, circ, tween, tset, tval, tdone, mk, pointer, put, register, disposer, solid,
 } = HL;
 
-const N = 12, U0 = -7, U1 = 72, HW = 6.5, T = 1, DZ = 1.25, A0 = 14, A1 = 166, REST = 7, OUT = 11, LIFT = 3, STEP = 40;
+const N = 12, U0 = -7, U1 = 72, HW = 6.5, T = 1, DZ = 1.25, A0 = 14, A1 = 166, REST = 7, OUT = 6, STEP = 40;
 const CHIPS = [16, 27, 38, 49, 60];
 const restA = (i) => rad(A0 + ((A1 - A0) * i) / (N - 1));
 
@@ -628,7 +629,7 @@ function mount({ stage, svg, read }, value) {
   let PART = value, act = -1;
 
   const C = Cam(45, 0.5, 2.1);
-  const box = [[-8, 0, -10], [8, N * DZ + LIFT + 4, -10]];
+  const box = [[-8, 0, -10], [8, N * DZ + 4, -10]];
   for (let a = A0 - 20; a <= A1 + 20; a += 6) box.push([Math.cos(rad(a)) * (U1 + OUT + 2), 0, Math.sin(rad(a)) * (U1 + OUT + 2)]);
   fit(C, box, 200, 170);
   const P = proj(C), V = viewDir(P);
@@ -642,7 +643,7 @@ function mount({ stage, svg, read }, value) {
     const el = solid(g);
     strips.push({ i, el, marks: mk("path", { class: "nf lo" }, el.g), a: tween(restA(i)), s: tween(0), z: tween(i * DZ), drawn: "" });
   }
-  const rivet = pin(3.4, N * DZ + LIFT + T, 2.2);
+  pin(3.4, (N - 1) * DZ + T, 2.2);
 
   function draw(st, a, s, z) {
     const key = a.toFixed(4) + "," + s.toFixed(3) + "," + z.toFixed(3);
@@ -683,11 +684,8 @@ function mount({ stage, svg, read }, value) {
       const part = act < 0 || d === 0 ? 0 : Math.sign(d) * rad(PART) * Math.max(0, 1 - (Math.abs(d) - 1) * 0.22);
       tset(st.a, restA(i) + part, now, wait);
       tset(st.s, d === 0 ? (act < 0 ? OUT * 0.55 : OUT) : 0, now, wait);
-      tset(st.z, d === 0 ? N * DZ + LIFT : i * DZ, now, 0);
       st.el.sil.classList.toggle("hi", d === 0);
     });
-    g.insertBefore(strips[k].el.g, rivet.g);
-    for (let i = 0; i < N; i++) if (i !== k) g.insertBefore(strips[i].el.g, strips[k].el.g);
     read.textContent = act < 0 ? "rest" : `swatch ${String(act + 1).padStart(2, "0")}`;
     B.wake();
   }

@@ -664,8 +664,6 @@ function mount({ stage, svg, read }, value) {
       u.el.sil.classList.toggle("hi", i === k);
       u.leds.forEach((l, j) => l.setAttribute("class", i === k ? "dot" : j === 0 ? "dot m" : "dot off"));
     });
-    const order = units0.filter((u) => u.i !== k).concat([units[k]]);
-    order.forEach((u) => g.insertBefore(u.el.g, g.lastChild));
     read.textContent = act < 0 ? "rest" : `server ${act + 1}`;
     B.wake();
   }

@@ -638,8 +638,6 @@ function mount({ stage, svg, read }, value) {
   block(-6, -14, W + 6, 14, 3, 1.2, -5, 0);
   block(0, -4, POST, 4, 1.4, 0.6, 0, H);
   block(POST, -3, W - POST, 3, 1.2, 0.6, 0, 4);
-  const bar = solid(g);
-  put(bar, slab(P, V, (u, v, t) => [u, v, t + H - 4], rings(POST, -3, W - POST, 3, 1.2, 0.6)[0], rings(POST, -3, W - POST, 3, 1.2, 0.6)[1], 4));
   mk("path", { d: Array.from({ length: NR }, (_, r) => seg(P(POST, 0, zOf(r)), P(W - POST, 0, zOf(r)))).join(""), class: "nf" }, g);
 
   const ring = circ(BR, 36), inner = circ(BR - 1.1, 36);
@@ -657,7 +655,12 @@ function mount({ stage, svg, read }, value) {
 
   const B = register(stage, (_dt, now) => {
     let moving = false;
-    for (const rod of rods) for (const b of rod.beads) { draw(b, rod.r, tval(b.x, now)); if (!tdone(b.x, now)) moving = true; }
+    for (const rod of rods) {
+      const xs = rod.beads.map((b) => { if (!tdone(b.x, now)) moving = true; return tval(b.x, now); });
+      for (let j = 0; j < NB; j++) xs[j] = Math.max(xs[j], j ? xs[j - 1] + BW : beadX(0, NB));
+      for (let j = NB - 1; j >= 0; j--) xs[j] = Math.min(xs[j], j < NB - 1 ? xs[j + 1] - BW : beadX(j, 0));
+      rod.beads.forEach((b, j) => draw(b, rod.r, xs[j]));
+    }
     return moving;
   });
   bag.add(B.unregister);

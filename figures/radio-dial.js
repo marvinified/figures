@@ -2,9 +2,9 @@
  * radio-dial: a portable radio, a speaker grille on the left of its face and a
  * tuning window on the right, ticked from 88 to 108 with seven stations dotted
  * along it, two knobs below, a handle and a telescopic antenna on top. The pointer's place along the
- * face tunes the needle on a spring; within the slider's capture of a station
- * it settles on the station, whose dot lights, and the tuning knob turns with
- * the needle, and the antenna draws out as the signal comes in. At rest the
+ * face tunes the needle on a spring; near a station it is drawn in, and within
+ * half the slider's capture it settles on the station, whose dot lights, and the tuning knob turns with
+ * the needle, and the antenna draws out slowly as the signal comes in. At rest the
  * needle sits between stations, the antenna half down.
  */
 const {
@@ -74,17 +74,18 @@ function mount({ stage, svg, read }, value) {
   const vol = knob(69, 8), tune = knob(93, 8);
   vol.mark.setAttribute("d", seg(vol.at(2.3, 2), vol.at(2.3, 6.5)));
 
-  const sp = spring(REST, { eps: 0.005 });
-  let drawn = NaN;
+  /** How strongly frequency f comes in: full on a station, none a station's width off it. */
+  const signal = (f) => { const u = clamp(1 - Math.min(...STATIONS.map((s) => Math.abs(s - f))) / 1.2, 0, 1); return u * u * (3 - 2 * u); };
+  const sp = spring(REST, { eps: 0.005 }), ant = spring(lerp(10, 58, signal(REST)), { k: 30, c: 11, eps: 0.05 });
+  let drawn = "";
   function draw() {
-    const f = sp.x;
-    if (f === drawn) return;
-    drawn = f;
+    const f = sp.x, len = ant.x, key = f + "," + len;
+    if (key === drawn) return;
+    drawn = key;
     const x = fx(f);
     needle.setAttribute("d", poly([F0(x - 0.6, WIN[2] + 2), F0(x + 0.6, WIN[2] + 2), F0(x + 0.6, WIN[3] - 2), F0(x - 0.6, WIN[3] - 2)]));
     const a = Math.PI / 2 - (f - F[0]) * 0.3;
     tune.mark.setAttribute("d", seg(tune.at(a, 2), tune.at(a, 6.5)));
-    const off = Math.min(...STATIONS.map((s) => Math.abs(s - f))), len = lerp(10, 58, clamp(1 - off / 1.4, 0, 1) ** 1.5);
     const b = [X1 - 8, -DY + 6, Z1 + 3], A = (t) => P(b[0] + AX[0] * t, b[1] + AX[1] * t, b[2] + AX[2] * t);
     rods.forEach((r, i) => {
       const p0 = A((len * i) / 3 - (i ? 1 : 0)), p1 = A((len * (i + 1)) / 3), d = Math.hypot(p1[0] - p0[0], p1[1] - p0[1]) || 1;
@@ -96,7 +97,7 @@ function mount({ stage, svg, read }, value) {
     if (k !== lit) { lit = k; dots.forEach((d, i) => d.setAttribute("class", i === k ? "dot" : "dot off")); }
   }
 
-  const B = register(stage, (dt) => { const m = stepS(sp, dt); draw(); return m; });
+  const B = register(stage, (dt) => { const m = stepS(sp, dt) | stepS(ant, dt); draw(); return !!m; });
   bag.add(B.unregister);
 
   /** The face point under the pointer, on the plane y = 0, as (x, z). */
@@ -111,9 +112,11 @@ function mount({ stage, svg, read }, value) {
     if (over !== null) {
       f = clamp(F[0] + ((over - WIN[0] - 4) / (WIN[1] - WIN[0] - 8)) * (F[1] - F[0]), F[0], F[1]);
       const s = STATIONS.reduce((a, b) => (Math.abs(b - f) < Math.abs(a - f) ? b : a));
-      if (Math.abs(s - f) <= CAP) f = s;
+      const c1 = Math.min(CAP * 1.5, 1.2), c0 = Math.min(CAP * 0.5, c1 - 0.2), u = clamp((Math.abs(s - f) - c0) / (c1 - c0), 0, 1);
+      f = s + (f - s) * u * u * (3 - 2 * u);
     }
     sp.t = f;
+    ant.t = lerp(10, 58, signal(f));
     read.textContent = over === null ? "rest" : f.toFixed(1);
     B.wake();
   }
